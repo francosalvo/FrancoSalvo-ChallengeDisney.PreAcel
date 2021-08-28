@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChallengeDisney.PreAcel.Migrations
 {
     [DbContext(typeof(WordDisneyContext))]
-    [Migration("20210828144704_Primera")]
+    [Migration("20210828201816_Primera")]
     partial class Primera
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,10 +60,10 @@ namespace ChallengeDisney.PreAcel.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("IdMovieOrSerie")
-                        .HasColumnType("int");
-
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
