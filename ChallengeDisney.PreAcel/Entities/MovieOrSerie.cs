@@ -12,6 +12,7 @@ namespace ChallengeDisney.PreAcel.Entities
         public string Image { get; set; } 
         public string Title { get; set; }
         public DateTime GetDate { get; set; }
+
         [Range(1,5)]
         public int Score { get; set; }
 

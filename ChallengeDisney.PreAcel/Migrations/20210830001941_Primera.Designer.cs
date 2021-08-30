@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChallengeDisney.PreAcel.Migrations
 {
     [DbContext(typeof(WordDisneyContext))]
-    [Migration("20210828201816_Primera")]
+    [Migration("20210830001941_Primera")]
     partial class Primera
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace ChallengeDisney.PreAcel.Migrations
 
                     b.HasIndex("MovieOrSerieId");
 
-                    b.ToTable("GendCharactersers");
+                    b.ToTable("Charactersers");
                 });
 
             modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.Gender", b =>

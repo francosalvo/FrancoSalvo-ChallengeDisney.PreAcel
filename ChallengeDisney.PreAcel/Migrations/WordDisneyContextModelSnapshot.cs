@@ -48,7 +48,7 @@ namespace ChallengeDisney.PreAcel.Migrations
 
                     b.HasIndex("MovieOrSerieId");
 
-                    b.ToTable("GendCharactersers");
+                    b.ToTable("Charactersers");
                 });
 
             modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.Gender", b =>

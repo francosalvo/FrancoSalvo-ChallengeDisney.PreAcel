@@ -45,7 +45,7 @@ namespace ChallengeDisney.PreAcel.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GendCharactersers",
+                name: "Charactersers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -59,9 +59,9 @@ namespace ChallengeDisney.PreAcel.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GendCharactersers", x => x.Id);
+                    table.PrimaryKey("PK_Charactersers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GendCharactersers_MovieOrSeries_MovieOrSerieId",
+                        name: "FK_Charactersers_MovieOrSeries_MovieOrSerieId",
                         column: x => x.MovieOrSerieId,
                         principalTable: "MovieOrSeries",
                         principalColumn: "Id",
@@ -69,8 +69,8 @@ namespace ChallengeDisney.PreAcel.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GendCharactersers_MovieOrSerieId",
-                table: "GendCharactersers",
+                name: "IX_Charactersers_MovieOrSerieId",
+                table: "Charactersers",
                 column: "MovieOrSerieId");
 
             migrationBuilder.CreateIndex(
@@ -82,7 +82,7 @@ namespace ChallengeDisney.PreAcel.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GendCharactersers");
+                name: "Charactersers");
 
             migrationBuilder.DropTable(
                 name: "MovieOrSeries");

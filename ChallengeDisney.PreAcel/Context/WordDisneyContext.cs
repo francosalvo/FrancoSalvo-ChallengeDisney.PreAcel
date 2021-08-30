@@ -22,7 +22,7 @@ namespace ChallengeDisney.PreAcel.Context
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Gender> Genders { get; set; } = null!;
-        public DbSet<Character> GendCharactersers { get; set; } = null!;
+        public DbSet<Character> Charactersers { get; set; } = null!;
         public DbSet<MovieOrSerie> MovieOrSeries { get; set; } = null!;
     }
 }
