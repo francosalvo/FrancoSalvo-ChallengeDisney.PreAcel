@@ -35,9 +35,6 @@ namespace ChallengeDisney.PreAcel.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MovieOrSerieId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -45,8 +42,6 @@ namespace ChallengeDisney.PreAcel.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MovieOrSerieId");
 
                     b.ToTable("Charactersers");
                 });
@@ -98,13 +93,19 @@ namespace ChallengeDisney.PreAcel.Migrations
                     b.ToTable("MovieOrSeries");
                 });
 
-            modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.Character", b =>
+            modelBuilder.Entity("CharacterMovieOrSerie", b =>
                 {
-                    b.HasOne("ChallengeDisney.PreAcel.Entities.MovieOrSerie", "MovieOrSerie")
-                        .WithMany("Characters")
-                        .HasForeignKey("MovieOrSerieId");
+                    b.Property<int>("CharactersId")
+                        .HasColumnType("int");
 
-                    b.Navigation("MovieOrSerie");
+                    b.Property<int>("MovieOrSeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharactersId", "MovieOrSeriesId");
+
+                    b.HasIndex("MovieOrSeriesId");
+
+                    b.ToTable("CharacterMovieOrSerie");
                 });
 
             modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.MovieOrSerie", b =>
@@ -116,14 +117,24 @@ namespace ChallengeDisney.PreAcel.Migrations
                     b.Navigation("Gender");
                 });
 
+            modelBuilder.Entity("CharacterMovieOrSerie", b =>
+                {
+                    b.HasOne("ChallengeDisney.PreAcel.Entities.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharactersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChallengeDisney.PreAcel.Entities.MovieOrSerie", null)
+                        .WithMany()
+                        .HasForeignKey("MovieOrSeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.Gender", b =>
                 {
                     b.Navigation("MovieOrSeries");
-                });
-
-            modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.MovieOrSerie", b =>
-                {
-                    b.Navigation("Characters");
                 });
 #pragma warning restore 612, 618
         }

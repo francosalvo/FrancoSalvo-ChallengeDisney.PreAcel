@@ -8,6 +8,23 @@ namespace ChallengeDisney.PreAcel.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Charactersers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: false),
+                    History = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Charactersers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genders",
                 columns: table => new
                 {
@@ -45,33 +62,33 @@ namespace ChallengeDisney.PreAcel.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Charactersers",
+                name: "CharacterMovieOrSerie",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<int>(type: "int", nullable: false),
-                    History = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MovieOrSerieId = table.Column<int>(type: "int", nullable: true)
+                    CharactersId = table.Column<int>(type: "int", nullable: false),
+                    MovieOrSeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Charactersers", x => x.Id);
+                    table.PrimaryKey("PK_CharacterMovieOrSerie", x => new { x.CharactersId, x.MovieOrSeriesId });
                     table.ForeignKey(
-                        name: "FK_Charactersers_MovieOrSeries_MovieOrSerieId",
-                        column: x => x.MovieOrSerieId,
+                        name: "FK_CharacterMovieOrSerie_Charactersers_CharactersId",
+                        column: x => x.CharactersId,
+                        principalTable: "Charactersers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CharacterMovieOrSerie_MovieOrSeries_MovieOrSeriesId",
+                        column: x => x.MovieOrSeriesId,
                         principalTable: "MovieOrSeries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Charactersers_MovieOrSerieId",
-                table: "Charactersers",
-                column: "MovieOrSerieId");
+                name: "IX_CharacterMovieOrSerie_MovieOrSeriesId",
+                table: "CharacterMovieOrSerie",
+                column: "MovieOrSeriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MovieOrSeries_GenderId",
@@ -81,6 +98,9 @@ namespace ChallengeDisney.PreAcel.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CharacterMovieOrSerie");
+
             migrationBuilder.DropTable(
                 name: "Charactersers");
 

@@ -14,9 +14,9 @@ namespace ChallengeDisney.PreAcel.Entities
         public int Weight { get; set; }
         public string History { get; set; }
 
-        public MovieOrSerie MovieOrSerie { get; set; }
 
-
+        public ICollection<MovieOrSerie> MovieOrSeries { get; set; }
+      
 
     }
 }
