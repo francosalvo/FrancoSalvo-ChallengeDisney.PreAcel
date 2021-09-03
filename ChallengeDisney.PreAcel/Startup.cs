@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,13 +35,16 @@ namespace ChallengeDisney.PreAcel
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChallengeDisney.PreAcel", Version = "v1" });
             });
             services.AddEntityFrameworkSqlServer();
-            services.AddDbContextPool<WordDisneyContext>(optionsAction: (provider, buldier) =>
+
+
+            services.AddDbContextPool<WordDisneyContext>(optionsAction: (services, options) =>
             {
 
-                buldier.UseInternalServiceProvider(provider);
-                buldier.UseSqlServer(connectionString: "Data Source=(localdb)\\MSSQLLocalDB;Database=WordDinseyDb;Integrated Security=True;");
-
+                options.UseInternalServiceProvider(services);
+                string connection = "Data Source=(localdb)\\MSSQLLocalDB;Database=WordDinseyDb;Integrated Security=True;";
+                options.UseSqlServer(connection);
             });
+        
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -67,3 +69,7 @@ namespace ChallengeDisney.PreAcel
         }
     }
 }
+
+
+
+
