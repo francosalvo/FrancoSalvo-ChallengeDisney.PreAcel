@@ -4,14 +4,16 @@ using ChallengeDisney.PreAcel.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChallengeDisney.PreAcel.Migrations
 {
     [DbContext(typeof(WordDisneyContext))]
-    partial class WordDisneyContextModelSnapshot : ModelSnapshot
+    [Migration("20210904000747_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,6 +46,24 @@ namespace ChallengeDisney.PreAcel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Charactersers");
+                });
+
+            modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.CharacterMovieOrSerie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CharactersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieOrSerieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CharacterMovieOrSeries");
                 });
 
             modelBuilder.Entity("ChallengeDisney.PreAcel.Entities.Gender", b =>
@@ -80,7 +100,7 @@ namespace ChallengeDisney.PreAcel.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Score")
+                    b.Property<int>("Score")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")

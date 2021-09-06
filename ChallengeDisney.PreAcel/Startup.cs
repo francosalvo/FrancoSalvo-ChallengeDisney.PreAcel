@@ -12,8 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChallengeDisney.PreAcel.Context; 
-
+using ChallengeDisney.PreAcel.Context;
+using AutoMapper;
+using ChallengeDisney.PreAcel.Mapping;
 
 namespace ChallengeDisney.PreAcel
 {
@@ -30,6 +31,16 @@ namespace ChallengeDisney.PreAcel
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChallengeDisney.PreAcel", Version = "v1" });

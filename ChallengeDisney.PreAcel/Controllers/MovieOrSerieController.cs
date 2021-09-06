@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ChallengeDisney.PreAcel.Context;
 using ChallengeDisney.PreAcel.Entities;
+using ChallengeDisney.PreAcel.DTO.GET;
+using AutoMapper;
 
 namespace ChallengeDisney.PreAcel.Controllers
 {
@@ -13,22 +15,62 @@ namespace ChallengeDisney.PreAcel.Controllers
     public class MovieOrSerieController : ControllerBase
     {
 
-
-
         private readonly WordDisneyContext _context;
-        private object MovieOrSerie;
+        private readonly IMapper _mapper;
 
-        public MovieOrSerieController(WordDisneyContext context) => _context = context;
+        public MovieOrSerieController(WordDisneyContext context, IMapper mapper) 
+        {
+            this._context = context;
+            this._mapper = mapper;
+        }
 
         //TODO: LISTAR peliculas
         [HttpGet]
-        [Route(template: "/Movies")]
-        public IActionResult Get()
+        [Route(template: "/GetAllMovies")]
+        public IActionResult GetAllMovieOrSerie()
         {
             return Ok(_context.MovieOrSeries.ToList());
         }
 
-        //TODO: Buscar
+        //TODO: LISTAR peliculas con imagen, fecha y titulo
+        [HttpGet]
+        [Route(template: "/Movies")]
+        public IActionResult GetDetailListMovieOrSerie()
+        {
+            try
+            {
+                IEnumerable<MovieOrSerie> movieOrSeries = _context.MovieOrSeries.Select(m => new MovieOrSerie
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    GetDate = m.GetDate,
+                    Characters = m.Characters
+                }); 
+                var movieOrSeriesDTO = _mapper.Map<IEnumerable<MovieOrSerie>, IEnumerable<MovieOrSerieDTO>>(movieOrSeries);
+
+                //Select(m => new MovieOrSeireDTO { Id = m.Id, Title = m.Title, GetDate = m.GetDate,  Characters = m.Characters }).ToList();
+                //(MovieOrSerieDTO
+                //    from m in _context.MovieOrSeries.ToList()
+                //    select new MovieOrSerie
+                //    {
+                //        Id = m.Id,
+                //        Title = m.Title,
+                //        GetDate = m.GetDate,
+                //        Characters = m.Characters,
+                //        Score = null
+                //    }
+
+                //).ToList();
+
+                return Ok(movieOrSeriesDTO);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        //TODO: Buscar por TITLE
         [HttpGet("name")]
 
         public ActionResult<Character> GetMovieOrSerieByTitle(string Title)
@@ -37,6 +79,16 @@ namespace ChallengeDisney.PreAcel.Controllers
             
         }
 
+        //TODO: Detalle por ID
+        [HttpGet("Id")]
+
+        public ActionResult<Character> GetMovieOrSerieByTitle(int Id)
+        {
+            //MovieOrSerie movie = _context.MovieOrSeries.Where(c => c.Id == Id).FirstOrDefault();
+            MovieOrSerie movie = _context.MovieOrSeries.Find(Id);
+
+            return Ok(movie);
+        }
 
 
         //TODO: crear

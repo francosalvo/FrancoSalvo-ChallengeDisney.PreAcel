@@ -24,5 +24,6 @@ namespace ChallengeDisney.PreAcel.Context
         public DbSet<Gender> Genders { get; set; } = null!;
         public DbSet<Character> Charactersers { get; set; } = null!;
         public DbSet<MovieOrSerie> MovieOrSeries { get; set; } = null!;
+
     }
 }
