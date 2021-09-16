@@ -7,6 +7,8 @@ using ChallengeDisney.PreAcel.Context;
 using ChallengeDisney.PreAcel.DTO.GET;
 using AutoMapper;
 using ChallengeDisney.PreAcel.Entities;
+using ChallengeDisney.PreAcel.Interfaces.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChallengeDisney.PreAcel.Controllers
 {
@@ -16,60 +18,22 @@ namespace ChallengeDisney.PreAcel.Controllers
     {
 
         private readonly WordDisneyContext _context;
+        private readonly ICharacterService _characterService;
         private readonly IMapper _mapper;
 
-        public CharacterController(WordDisneyContext context, IMapper mapper) {
+        public CharacterController(WordDisneyContext context, IMapper mapper, ICharacterService characterService) {
             _context = context;
             _mapper = mapper;
+            _characterService = characterService;
         }
 
-        //TODO: LISTAR Caracteres
-        [HttpGet]
-       
-        public IActionResult Get()
+        public async Task<IActionResult> GetCharacter(int id)
         {
             try
             {
-                IEnumerable<Character> characters = _context.Charactersers.Select(c => new Character
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Image = c.Image,
-                  
-                });
-                var charactersDTO = _mapper.Map<IEnumerable<Character>, IEnumerable<CharacterDTO>>(characters);
-                return Ok(charactersDTO);
-            }
-            catch(Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-        //TODO: LISTAR Caracteres
-        [HttpGet]
-        [Route(template: "api/[controller]/GetCharWithSeriesOrMovies")]
-        public IActionResult GetCharWithSeriesOrMovies()
-        {
-            try
-            {
-                List<Character> characters = _context.Charactersers.Select(c => new Character { Id = c.Id, Name = c.Name, Image = c.Image, Age = c.Age, MovieOrSeries = c.MovieOrSeries }).ToList();
-                //(
-                //                                from ca in _context.Charactersers.ToList() 
-                //                                //join mc in _context.MovieOrSeries.Select(m => m.Characters).FirstOrDefault()                               
-                //                                //on ca.Id equals mc.Id
-                //                                select new Character 
-                //                                { 
-                //                                    Id = ca.Id,
-                //                                    Name = ca.Name, 
-                //                                    Image = ca.Image,
-                //                                    Age = ca.Age,
-                //                                    Weight = ca.Weight,
-                //                                    History = ca.History,
-                //                                    MovieOrSeries = ca.MovieOrSeries
-                //                                }).ToList();
-
-                return Ok(characters);//(_context.Charactersers.ToList());
+                Character character = await _characterService.GetCharacter(id);
+                var characterDTO = _mapper.Map<Character, CharacterDTO>(character);
+                return Ok(characterDTO);
             }
             catch (Exception ex)
             {
@@ -77,39 +41,25 @@ namespace ChallengeDisney.PreAcel.Controllers
             }
         }
 
-        //TODO: Buscar Nombre
-        [HttpGet("name")]
-        
-        public ActionResult<Character> GetCharacterByName(string name)
+        // DEVUELVE INFO DETALLADA DE UN PERSONAJE EN PARTICULAR
+        [HttpGet] //Verbo de http GET 
+        [Route(template: "GetCharacterWithMovies")]
+        public async Task<IActionResult> GetCharacterWithMovies(string name, int age, int idMovie) // Puedo agregarle parámetros para que funcionen como filtros
         {
-           return Ok(_context.Charactersers.Where(c => c.Name == name));
-           //return Ok(_context.Charactersers.Find(name));
+            //filtra el personaje por nombre, id o edad. - ´También devuelve todas las películas en las que participó ese personaje
+            try
+            {
+                var charactersWithMovies = await _characterService.GetCharWithSeriesOrMovies(name, age, idMovie);
+
+                var charactersWithMoviesDTO = _mapper.Map<IEnumerable<Character>, IEnumerable<GetCharacterWithMoviesDTO>>(charactersWithMovies);
+
+                return Ok(charactersWithMoviesDTO);
+            }
+            catch(Exception ex)
+            {
+                return Problem("Ha ocurrido un problema, por favor intente nuevamente. Detalle: " + ex.Message);
+            }
         }
-
-
-        //TODO: Buscar Edad
-        [HttpGet("Age")]
-
-        public ActionResult<Character> GetCharacterByAge(int Age)
-        {
-            return Ok(_context.Charactersers.Where(c => c.Age == Age));
-            
-        }
-
-
-        //TODO: Buscar Movie Or Serie
-        [HttpGet("movies")]
-
-        //public ActionResult<Character> GetCharacterByMovieOrSerie(int IdMovie)
-        //{
-        //    return Ok(_context.Charactersers.Where(c => c. == IdMovie));
-
-        //}
-
-
-
-
-        //TODO: crear
 
         [HttpPost]
         [Route(template: "api/[controller]/Create")]
@@ -134,6 +84,7 @@ namespace ChallengeDisney.PreAcel.Controllers
             _context.SaveChanges();
             return Ok(_context.Charactersers.ToList());
         }
+
         //TODO: borrar
         [HttpDelete]
         [Route("{id}/Delete")]
@@ -145,12 +96,9 @@ namespace ChallengeDisney.PreAcel.Controllers
             _context.Charactersers.Remove(internaCharacter);
             _context.SaveChanges();
             return Ok();
-
-
-
         }
 
-
-
     }
+
 }
+ 

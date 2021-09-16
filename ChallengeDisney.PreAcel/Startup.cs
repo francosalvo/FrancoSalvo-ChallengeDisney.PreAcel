@@ -14,7 +14,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChallengeDisney.PreAcel.Context;
 using AutoMapper;
+using ChallengeDisney.PreAcel.Repositories;
+using ChallengeDisney.PreAcel.Interfaces.Repositories;
 using ChallengeDisney.PreAcel.Mapping;
+using Microsoft.AspNetCore.Identity;
+using ChallengeDisney.PreAcel.Entities;
 
 namespace ChallengeDisney.PreAcel
 {
@@ -55,6 +59,12 @@ namespace ChallengeDisney.PreAcel
                 string connection = "Data Source=(localdb)\\MSSQLLocalDB;Database=WordDinseyDb;Integrated Security=True;";
                 options.UseSqlServer(connection);
             });
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UserContext>().AddDefaultTokenProviders();
+            // Inyección de dependencia de repositorios:
+            services.AddScoped<ICharacterRepository, CharacterRepository>();
+            services.AddScoped<IGenderRepository, GenderRepository>();
+            services.AddScoped<IMovieOrSerieRepository, MovieOrSerieRepository>();
+            services.AddScoped<>
         
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
